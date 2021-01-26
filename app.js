@@ -29,6 +29,10 @@ mongoose.connect(process.env.MONGODB_STRING, {
 
 app.use(express.static('frontend/build'))
 
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
+  });
+
 //Routes
 app.use('/user', user)
 app.use('/collections', collections)
