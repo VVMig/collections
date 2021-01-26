@@ -27,9 +27,7 @@ mongoose.connect(process.env.MONGODB_STRING, {
     console.log('MongoDB have been connected')
 })
 
-if(process.env.NODE_ENV === 'production') {
-    app.use(express.static('frontend/build'))
-}
+app.use(express.static('frontend/build'))
 
 //Routes
 app.use('/user', user)
