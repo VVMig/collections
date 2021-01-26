@@ -1,0 +1,11 @@
+.item-liked:hover {
+    color: red;
+}
+
+.item-unliked:hover {
+    color: rgb(175, 172, 172);
+}
+
+.item-liked {
+    color: red;
+}

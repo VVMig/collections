@@ -1,0 +1,16 @@
+.item-picture {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(230, 230, 252);
+    transition: 0.2s linear;
+}
+
+.item-picture:hover {
+    transition: 0.2s linear;
+    background-position: 0 30%;
+}

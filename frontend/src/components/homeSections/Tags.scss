@@ -1,0 +1,7 @@
+.tag {
+    transition: 0.2s linear;
+    &:hover {
+        background-color: #007bff !important;
+        color: #f8f9fa !important;
+    }
+}

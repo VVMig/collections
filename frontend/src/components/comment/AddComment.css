@@ -1,0 +1,6 @@
+.btn-comment:focus {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    outline: 0 !important;
+}
