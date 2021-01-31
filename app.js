@@ -15,8 +15,6 @@ require('dotenv').config()
 app.use(express.json({limit: '50mb'}))
 app.use(cors())
 
-app.listen(PORT, () => console.log(`Server has been started on ${PORT}`))
-
 mongoose.connect(process.env.MONGODB_STRING, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true,
@@ -27,13 +25,13 @@ mongoose.connect(process.env.MONGODB_STRING, {
     console.log('MongoDB have been connected')
 })
 
-app.use(express.static('frontend/build'))
+app.use(express.static(path.join(__dirname,'frontend','build')))
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
-});
+// app.get('/', function (req, res) {
+//     res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
+// });
 
-app.get('/*', function (req, res) {
+app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
 });
 
@@ -41,3 +39,5 @@ app.get('/*', function (req, res) {
 app.use('/api/user', user)
 app.use('/api/collections', collections)
 app.use('/api/item', item)
+
+app.listen(PORT, () => console.log(`Server has been started on ${PORT}`))
