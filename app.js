@@ -31,9 +31,26 @@ app.use(express.static(path.join(__dirname,'frontend','build')))
 //     res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
 // });
 
-app.get('*', function (req, res) {
+app.get('/collection', function (req, res) {
     res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
 });
+
+app.get('/admin', function (req, res) {
+    res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
+});
+
+app.get('/profile', function (req, res) {
+    res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
+});
+
+app.get('/search', function (req, res) {
+    res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
+});
+
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
+});
+
 
 //Routes
 app.use('/api/user', user)
