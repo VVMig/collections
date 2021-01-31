@@ -12,9 +12,11 @@ import Like from './ItemLike'
 
 import { getItem } from '../../redux/actions'
 
+import lang from '../../lang.json'
+
 function ModalItem(props) {
     const { item } = useSelector(state => state.item)
-    const userData = useSelector(state => state.userData) 
+    const { userData } = useSelector(state => state.userData)
     const { collection } = useSelector(state => state.collection.collection)
 
     const closeModal = useRef()
@@ -39,15 +41,15 @@ function ModalItem(props) {
                     <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">{item.title}</h5>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div className="modal-body">
                         {item.picture &&
                         <img src={item.picture} className="img-fluid rounded" alt={item.title}/>}
                         <ul className="list-group mt-1">
-                            {item.author && <li className="list-group-item">Author: {item.author}</li>}
-                            {item.year && <li className="list-group-item">Date: {new Date(item.year).toLocaleDateString()}</li>}
+                            {item.author && <li className="list-group-item">{lang.ModalItem.author[userData.user.lang]}: {item.author}</li>}
+                            {item.year && <li className="list-group-item">{lang.ModalItem.date[userData.user.lang]}: {new Date(item.year).toLocaleDateString()}</li>}
                         </ul>
                         {item.tags && item.tags.length > 0 && <Tags value={item.tags} readOnly className="mt-1"/>}
                         {item.likes &&

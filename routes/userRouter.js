@@ -156,6 +156,21 @@ router.post('/verifyToken', async (req, res) => {
 
 router.get('/', auth, (req, res) => res.json(req.user))
 
+router.post('/switchLang', auth, async (req, res) => {
+    try {
+        const { lang } = req.body
+        const user = await User.findById(req.user.id)
+
+        user.lang = lang
+
+        await user.save()
+
+        res.json(lang)
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
 router.get('/home', async (req, res) => {
     try {
         const lastAdded = await Item.find({}).sort({ date: -1 }).limit(9)
@@ -187,6 +202,7 @@ router.get('/profile', async (req, res) => {
         }
 
         const user = await User.findById(id)
+        const collections = await Collection.find({ owner: id })
 
         if(!user) {
             return res.status(400).json({ error: {message: 'No user with this id'}})
@@ -200,7 +216,8 @@ router.get('/profile', async (req, res) => {
                 email: user.email,
                 userRole: user.userRole,
                 blocked: user.blocked,
-                userPhoto: user.userPhoto
+                userPhoto: user.userPhoto,
+                collections: collections.length
             }
         })
     } catch (error) {

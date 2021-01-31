@@ -1,75 +1,92 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Axios from 'axios'
-import { useSelector, connect } from 'react-redux'
+import { useSelector, connect, useDispatch } from 'react-redux'
 
 import Spinner from '../spinner/Spinner'
-import AddCollection from '../collection/AddCollectionModal'
+import { API_URL } from '../../config'
+import UserPicture from '../userPicture/UserPicture' 
+import AddBtn from '../collection/BtnAddCollection'
+import AddModal from '../collection/AddCollectionModal'
 
-function Profile() {
-    const userData = useSelector(state => state.userData)
+
+import './Profile.scss'
+
+import lang from '../../lang.json'
+import { clearErrorAll, endLoadingPage, setError, startLoadingPage } from '../../redux/actions'
+import CollectionsItems from '../collection/CollectionsItems'
+
+function Profile({ userData }) {
+    const { loading } = useSelector(state => state.error)
+    const { collections } = useSelector(state => state.allCollections) 
     const [userProfile, setUserProfile] = useState({});  
-    const [errorLoading, setErrorLoading] = useState(false)
-    const [errorMessage, setErrorMessage] = useState('')
     const location = useLocation();
     const id = new URLSearchParams(location.search).get('id')
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const getProfileData = async () => {
+            dispatch(clearErrorAll())
+            dispatch(startLoadingPage())
+            console.log(id)
+
             try {
-                const response = await Axios.get('/user/profile', {
+                const response = await Axios.get(`${API_URL}/api/user/profile`, {
                     params: {
                         id 
                     }
                 })
-                
                 setUserProfile(response.data)
             } catch (error) {
-                setErrorMessage(error.response ? error.response.data.message : 'Connection error. Please try again later:(')
-                setErrorLoading(true)
+                dispatch(setError(error))
+            }
+            finally {
+                dispatch(endLoadingPage())
             }
         };
 
         getProfileData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
 
     return (
         <>
-            {!userProfile.user ? 
-            <Spinner errorLoading={errorLoading} errorMessage={errorMessage}/> :
-            userProfile.user ?
-                <div className="d-flex">
-                    <div className="card col-md-6">
-                        <div className="card-body">
-                            <h5 className="card-title">{userProfile.user.displayName}</h5>
-                            <div className="card-body">
-                                {!userProfile.user.blocked ?
-                                <>
-                                    <div className="card-header">Info</div>
-                                    <ul className="list-group list-group-flush">
-                                        <li className="list-group-item">Email: {userProfile.user.email}</li>
-                                        <li className="list-group-item">Register date: {userProfile.user.registerDate}</li>
-                                        <li className="list-group-item">Role: {userProfile.user.userRole}</li>
-                                        <li className="list-group-item">
-                                            <Link to={`/collections?id=${userProfile.user.id}`}>Collections</Link>
-                                        </li>
-                                    </ul>
-                                </> :
-                                <h5 className="text-danger">User has been blocked</h5>}
-                                {userData.user && userData.user.id === id && !userData.user.blocked && userData.user.userRole === 'admin'
-                                && <Link to="/admin" className="btn btn-primary">Admin panel</Link>}
-                            </div>
+            {loading && !userProfile.user && <Spinner/>}
+            {userProfile.user && 
+            <>
+                <div className="d-flex mt-3 align-items-center flex-md-row flex-column" style={{gap: '3rem'}}>
+                    <div className="d-flex flex-column">
+                        <div className="bg-light text-center p-3" style={{borderRadius: 10}}>
+                            <UserPicture picture={userProfile.user.userPhoto} name={userProfile.user.displayName} styles={{width: 180, height: 180, fontSize: '5rem'}}/>
+                            <h4>{userProfile.user.displayName}</h4>
+                            <span>{userProfile.user.userRole}</span>
                         </div>
+                        {userData.user.userRole === 'admin' && <div className="bg-light text-center p-3 mt-1" style={{borderRadius: 10}}>
+                            <Link to="/admin" className="btn btn-primary">Admin panel</Link>
+                        </div>}
                     </div>
-                    {(userData.user && (userData.user['id'] === id || userData.user['userRole'] === 'admin')) && <div className="col-md-6">
-                        <AddCollection/>
-                    </div>}
-            </div>: <h2>No user with this id :(</h2>}
-            
+                    <div className="bg-light p-3 w-100" style={{borderRadius: 10}}>
+                        <h2>About</h2>
+                        <ul className="list-group list-group-flush">
+                            <li className="list-group-item">Email: {userProfile.user.email}</li>
+                            <li className="list-group-item">Register date: {new Date(parseFloat(userProfile.user.registerDate)).toLocaleDateString()}</li>
+                            <li className="list-group-item">Number of collections: {collections.length}</li>
+                        </ul>
+                    </div>
+                </div>
+                {(userData.user.userRole === 'admin' || userData.user.id === id) &&
+                <div className="text-center mt-2">
+                    <AddBtn styles={{width: '100%'}}/>
+                    <AddModal/>
+                </div>
+                }
+                <CollectionsItems id={id}/>
+            </>
+            }    
         </>
     )
 }
 
-const mapStateToProps = state => state.userData;
+const mapStateToProps = state => state.userData
 
 export default connect(mapStateToProps, null)(Profile)

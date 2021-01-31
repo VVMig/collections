@@ -13,9 +13,7 @@ import { setSearch } from '../../redux/actions';
 
 SwiperCore.use([Scrollbar]);
 
-function Tags(props){
-    const { tags } = useSelector(state => state.home)
-
+function Tags({ tags }){
     const history = useHistory()
 
     const dispatch = useDispatch()
@@ -39,12 +37,26 @@ function Tags(props){
 
     return (
         <div className="mt-2 mb-2">
-            {tags.length &&
+            {tags.length > 0 &&
             <Swiper
             spaceBetween={50}
-            slidesPerView={8}
+            slidesPerView={2}
             scrollbar={{ draggable: true }}
             className="d-flex justify-content-center pb-3"
+            breakpoints={{
+                576: {
+                    slidesPerView: 4
+                },
+                768: {
+                    slidesPerView: 5
+                },
+                992: {
+                    slidesPerView: 6
+                },
+                1200: {
+                    slidesPerView: 8
+                }
+            }}
             >
                 {tags.map(carouselItem)}
             </Swiper>

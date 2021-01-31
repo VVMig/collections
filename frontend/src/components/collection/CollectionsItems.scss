@@ -1,0 +1,51 @@
+@mixin pictureMixin($heightPicture: 200px, $cardWidth: 18rem) {
+    .main-picture {
+        height: $heightPicture;
+    }
+
+    .card {
+        width: $cardWidth;
+    }
+}
+
+.collections-container {
+    gap: 1rem;
+
+    @include pictureMixin(150px, 14rem);
+
+    .card:hover {
+        border-color: #007bff;
+        transition: 0.2s linear;
+    }
+
+}
+
+.delete-collection {
+    cursor: pointer;
+}
+
+@media (min-width: 576px) { 
+    .collections-container {
+        @include pictureMixin(150px, 14rem);
+    }
+}
+
+@media (min-width: 768px) { 
+    .collections-container {
+        @include pictureMixin(100px, 10rem);
+    }
+}
+
+@media (min-width: 992px) { 
+    .collections-container {
+        @include pictureMixin(150px, 14rem);
+    }
+}
+
+@media (min-width: 1200px) { 
+    .collections-container {
+        @include pictureMixin();
+    }
+}
+
+

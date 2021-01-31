@@ -3,13 +3,12 @@ import * as Icon from 'react-bootstrap-icons'
 import {  useDispatch, useSelector } from 'react-redux'
 import Axios from 'axios'
 import { getCollection, getItem } from '../../redux/actions'
+import { API_URL } from '../../config'
 
-function ItemLike(props) {
-    const  { likes, id, homeAction }  = props
-
+function ItemLike({ likes, id, homeAction }) {
     const { collection } = useSelector(state => state.collection.collection)
 
-    const userData = useSelector(state => state.userData)
+    const { userData } = useSelector(state => state.userData)
 
     const [liked, setLiked] = useState(false)
     const [likesNumber, setLikesNumber] = useState(0)
@@ -23,7 +22,7 @@ function ItemLike(props) {
 
     async function toggleLike() {
         try {
-            await Axios.post('/item/like', {
+            await Axios.post(`${API_URL}/api/item/like`, {
                 itemId: id
             }, {
                 headers: {

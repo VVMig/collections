@@ -6,21 +6,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import ReactMarkdown from 'react-markdown'
 
 import UserPicture from '../userPicture/UserPicture'
-
+import { API_URL } from '../../config'
 import './Comment.css'
 import { getItem } from '../../redux/actions'
 
 function Comment(props) {
     const { userPhoto, userId, date, comment, modal, userName, owner, _id } = props 
 
-    const userData = useSelector(state => state.userData)
+    const { userData } = useSelector(state => state.userData)
     const { item } = useSelector(state => state.item)
 
     const dispatch = useDispatch()
 
     async function removeComment() {
         try {
-            await Axios.post('/item/removeComment', {
+            await Axios.post(`${API_URL}/api/item/removeComment`, {
                 commentId: _id,
                 itemId: item._id
             }, {

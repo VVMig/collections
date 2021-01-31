@@ -5,11 +5,14 @@ import Axios from 'axios'
 
 import { useSelector, useDispatch } from 'react-redux'
 
-import { getCollection } from '../../redux/actions'
+import { getCollection, setNotify, clearErrorAll, startLoadingPage, setError, endLoadingPage } from '../../redux/actions'
 
 import FileInput from '../fileInput/FileInput'
+import { API_URL } from '../../config'
 
-import './AddItem.css'
+import lang from '../../lang.json'
+
+import './AddItem.scss'
 
 const baseTagifySettings = {
     blacklist: ["xxx", "yyy", "zzz"],
@@ -23,12 +26,11 @@ const baseTagifySettings = {
 function AddItemModal(props) {
     const {author, year, comments, id} = props
 
-    const closeModal = useRef()
     const tagifyRef = useRef()
 
     const dispatch = useDispatch()
 
-    const userData = useSelector(state => state.userData)
+    const { userData } = useSelector(state => state.userData)
 
     const [title, setTitle] = useState('')
     const [itemAuthor, setItemAuthor] = useState('')
@@ -37,13 +39,18 @@ function AddItemModal(props) {
     const [tagifyProps, setTagifyProps] = useState({})
     const [picture, setPicture] = useState('')
 
+    
     const fetchItems = useCallback(() => {
         dispatch(getCollection(id))            
     }, [id, dispatch]) 
 
     async function addItem() {
         try {
-            await Axios.post('/item/add', {
+            dispatch(clearErrorAll())
+            dispatch(startLoadingPage())
+            dispatch(setNotify(true))
+
+            await Axios.post(`${API_URL}/api/item/add`, {
                 title,
                 date: itemDate,
                 author: itemAuthor,
@@ -56,10 +63,12 @@ function AddItemModal(props) {
                 }
             })
 
-            closeModal.current.click()
             fetchItems()
         } catch (error) {
-            console.log(error.response.data.message)
+            dispatch(setError(error))
+        }
+        finally {
+            dispatch(endLoadingPage())
         }
     }
 
@@ -68,7 +77,7 @@ function AddItemModal(props) {
             try {
                 setTagifyProps({loading: true})
 
-                const response = await Axios.get('/item/tags')
+                const response = await Axios.get(`${API_URL}/api/item/tags`)
 
                 setTagifyProps((lastProps) => ({
                     ...lastProps,
@@ -95,7 +104,7 @@ function AddItemModal(props) {
                     <div className="modal-content" style={{position: 'relative'}}>
                         <>
                             <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Item settings</h5>
+                                <h5 className="modal-title" id="exampleModalLabel">{lang.AddItemModal.itemSettings[userData.user.lang]}</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -104,25 +113,25 @@ function AddItemModal(props) {
                             <div className="input-group mb-3">
                                     <div className="custom-control custom-switch mr-2">
                                         <input disabled defaultChecked={comments} type="checkbox" className="custom-control-input" id="commentsCheck"/>
-                                        <label className="custom-control-label" htmlFor="commentsCheck">Comments</label>
+                                        <label className="custom-control-label" htmlFor="commentsCheck">{lang.AddItemModal.comments[userData.user.lang]}</label>
                                     </div>
                                     <div className="custom-control custom-switch mr-2">
                                         <input disabled defaultChecked={author} type="checkbox" className="custom-control-input" id="authorCheck"/>
-                                        <label className="custom-control-label" htmlFor="authorCheck">Author</label>
+                                        <label className="custom-control-label" htmlFor="authorCheck">{lang.AddItemModal.author[userData.user.lang]}</label>
                                     </div>
                                     <div className="custom-control custom-switch">
                                         <input disabled defaultChecked={year} type="checkbox" className="custom-control-input" id="yearCheck"/>
-                                        <label className="custom-control-label" htmlFor="yearCheck">Year</label>
+                                        <label className="custom-control-label" htmlFor="yearCheck">{lang.AddItemModal.date[userData.user.lang]}</label>
                                     </div>
                                 </div>
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">Title</span>
+                                        <span className="input-group-text" id="basic-addon1">{lang.AddItemModal.title[userData.user.lang]}</span>
                                     </div>
                                     <input 
                                     value={title} 
                                     onChange={(e) => setTitle(e.target.value)}
-                                    type="text" className="form-control" placeholder="Title" aria-label="Title" aria-describedby="basic-addon1"/>
+                                    type="text" className="form-control" placeholder={lang.AddItemModal.title[userData.user.lang]} aria-label="Title" aria-describedby="basic-addon1"/>
                                 </div>
                                 <div className="input-group mb-3">
                                     <FileInput picture={picture} setPicture={setPicture}/>
@@ -130,22 +139,22 @@ function AddItemModal(props) {
                                 {author && 
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">Author</span>
+                                        <span className="input-group-text" id="basic-addon1">{lang.AddItemModal.author[userData.user.lang]}</span>
                                     </div>
                                     <input 
                                     value={itemAuthor}
                                     onChange={(e) => setItemAuthor(e.target.value)}
-                                    type="text" className="form-control" placeholder="Author" aria-label="Author" aria-describedby="basic-addon1"/>
+                                    type="text" className="form-control" placeholder={lang.AddItemModal.author[userData.user.lang]} aria-label="Author" aria-describedby="basic-addon1"/>
                                 </div>
                                 }
                                 {year &&
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
-                                        <span className="input-group-text">Date</span>
+                                        <span className="input-group-text">{lang.AddItemModal.date[userData.user.lang]}</span>
                                     </div>
                                     <input 
                                     onChange={(e) => setItemDate(e.target.valueAsNumber)} 
-                                    type="date" className="form-control" placeholder="Date" aria-label="Date"/>
+                                    type="date" className="form-control" placeholder={lang.AddItemModal.date[userData.user.lang]} aria-label="Date"/>
                                 </div>
                                 }
                                 <div className="input-group mb-3">
@@ -153,12 +162,13 @@ function AddItemModal(props) {
                                     tagifyRef={tagifyRef}
                                     settings={settings}
                                     {...tagifyProps}
+                                    placeholder={lang.AddItemModal.tags['en']}
                                     />
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal" ref={closeModal}>Close</button>
-                                <button type="button" className="btn btn-primary" onClick={addItem}>Add item</button>
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">{lang.AddItemModal.close[userData.user.lang]}</button>
+                                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={addItem}>{lang.AddItemModal.addItem[userData.user.lang]}</button>
                             </div> 
                         </>
                     </div>

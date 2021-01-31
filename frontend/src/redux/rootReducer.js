@@ -6,6 +6,7 @@ import { itemReducer } from './itemReducer'
 import { collectionReducer } from './collectionReducer'
 import { homeReducer } from './homeReducer'
 import { searchReducer } from './searchReducer'
+import { allCollectionsReducer } from './allCollectionsReducer'
 
 export const rootReducer = combineReducers({
     userData: userReducer,
@@ -13,5 +14,6 @@ export const rootReducer = combineReducers({
     item: itemReducer,
     collection: collectionReducer,
     home: homeReducer,
-    search: searchReducer
+    search: searchReducer,
+    allCollections: allCollectionsReducer
 })

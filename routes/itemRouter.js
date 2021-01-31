@@ -92,6 +92,76 @@ router.post('/removeComment', auth, async (req, res) => {
     }
 })
 
+router.post('/edit', auth, async (req, res) => {
+    try {
+        const { author, tags,  date, title, collection_id, picture, id} = req.body
+
+        if(!title){
+            return res.status(400).json({ message: `Title can not be empty` })
+        }
+
+        const collection = await Collection.findById(collection_id)
+
+        if(!collection) {
+            return res.status(404).json({ message: `Collection with id ${id} is nonexist` })
+        }
+
+        if(collection.owner != req.user.id && req.user.userRole !== 'admin') {
+            return res.status(401).json({ message: 'You do not have permission for this operation' })
+        }
+
+        if(!collection.author && author)  {
+            return res.status(400).json({ message: 'Author is not allow in this collection' })
+        }
+
+        if(!collection.year && date) {
+            return res.status(400).json({ message: 'Year is not allow in this collection' })
+        }
+
+        const item = await Item.findById(id)
+
+        if(!item) {
+            return res.status(404).json({ message: 'This item do not exist' })
+        }
+
+        const { url } = item.picture !== picture 
+        && picture 
+        && await cloudinary.uploader.upload(picture, {
+            upload_preset: 'ml_default'
+        }, (err, result) => result)
+
+        item.title = title
+
+        item.tags = []
+
+        tags.forEach(e => item.tags.push(e.value))
+
+        item.year = date
+        item.author = author
+
+        if(url) {
+            item.picture = url
+        }
+
+        item.save()
+
+        if(tags) {
+            tags.forEach(async e => {
+                if(!(await Tags.exists({text: e.value}))) {
+                    await Tags.create({
+                        text: e.value,
+                        date: Date.now()
+                    })
+                }
+            })
+        }       
+        
+        res.json(item)
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
 router.post('/comment', auth, async (req, res) => {
     try {
         const { comment, itemId, collectionId } = req.body
@@ -129,8 +199,6 @@ router.get('/search', async (req, res) => {
     try {
         const { searchText } = req.query
         
-        console.log(searchText)
-
         const searchParam = new RegExp(searchText, 'gi')
 
         const resultItems = await Item.find({$or: [{
@@ -144,7 +212,6 @@ router.get('/search', async (req, res) => {
         }
         ]})
 
-        console.log(resultItems)
         res.json(resultItems)
     } catch (error) {
         res.status(500).json({ error })

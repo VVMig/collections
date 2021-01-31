@@ -6,6 +6,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 
 import Spinner from '../spinner/Spinner'
 import { deleteUser, setAdmin, removeAdmin, blockUser, unblockUser } from '../../redux/actions';
+import { API_URL } from '../../config'
 
 function Users() {
     const [users, setUsers] = useState([])
@@ -13,7 +14,7 @@ function Users() {
     const [actionsUsers, setActionsUsers] = useState([])
     const [errorLoading, setErrorLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const userData = useSelector(state => state.userData)
+    const { userData } = useSelector(state => state.userData)
     const error = useSelector(state => state.error)
     const dispatch = useDispatch()
     const keys = ['displayName', 'email', 'registerDate', 'userRole']
@@ -23,7 +24,7 @@ function Users() {
             if(!userData.token)
                 return;
             try {
-                const response = await Axios.get('/user/users', {
+                const response = await Axios.get(`${API_URL}/api/user/users`, {
                     headers: {
                         'x-auth-token': userData.token 
                     }

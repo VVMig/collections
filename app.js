@@ -3,7 +3,7 @@ const app = express()
 const mongoose = require('mongoose')
 const cors = require('cors')
 const PORT = process.env.PORT || 4000
-
+const path = require('path')
 const tags = require('./models/Tags')
 
 const user = require('./routes/userRouter')
@@ -29,11 +29,11 @@ mongoose.connect(process.env.MONGODB_STRING, {
 
 app.use(express.static('frontend/build'))
 
-app.get('/*', function (req, res) {
+app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
-  });
+});
 
 //Routes
-app.use('/user', user)
-app.use('/collections', collections)
-app.use('/item', item)
+app.use('/api/user', user)
+app.use('/api/collections', collections)
+app.use('/api/item', item)

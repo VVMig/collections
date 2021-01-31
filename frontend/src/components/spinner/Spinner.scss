@@ -1,0 +1,13 @@
+$size-spinner: 50px;
+
+.spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.spinner-grow {
+    width: $size-spinner;
+    height: $size-spinner;
+}

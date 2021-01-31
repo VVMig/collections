@@ -1,59 +1,71 @@
 import React, { useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import $ from 'jquery'
-import {  useDispatch } from 'react-redux'
+import {  useDispatch, useSelector } from 'react-redux'
 
 import Like from './ItemLike'
-import Picture from './ItemPicture'
+import MainPicture from '../mainPicture/MainPicture'
 
-import { getItem } from '../../redux/actions'
+import { getItem, setItem } from '../../redux/actions'
 import { useHistory } from 'react-router-dom'
+
+import './Item.scss'
+
+import lang from '../../lang.json'
 
 function Item(props) {
     const { author, year, title, _id, picture, collection_id } = props.itemProps
     const likes = props.itemProps.likes
     const { homeAction } = props
 
-    const card = useRef()
+    const location = useLocation()
+
+    const { userData } = useSelector(state => state.userData)
+    const { collection } = useSelector(state => state.collection.collection)
 
     const history = useHistory()
 
     const dispatch = useDispatch()
 
-    function hover() {
-        $(card.current).toggleClass('border-primary')
-    }
+    function toCollection(e) {
+        dispatch(getItem(_id))
 
-    function toCollection() {
-        history.push(`/collections/collection?collection_id=${collection_id}`)
+        if(location.pathname === '/collection') {
+            return 
+        }
+
+        history.push(`/collection?collection_id=${collection_id}`)
     }
 
     return (
         <>
-            <div className="card border" ref={card}  onMouseEnter={hover} onMouseLeave={hover} style={{width: '12rem'}}>
-                <Picture picture={picture} title={title} styles={{height: 100}} className="card-img-top"/>
-                <div className="card-body">
+            <div className="card border item" 
+            style={{width: '12rem'}}
+            >
+                <MainPicture picture={picture} title={title} styles={{height: 100}} className="card-img-top"/>
+                <div className="card-body" onClick={(e) => toCollection(e)} data-toggle="modal" data-target="#item" style={{cursor: 'pointer'}}>
                     <h5 className="card-title">{title}</h5>
                     <ul className="list-group list-group-flush">
                         {author &&
-                        <li className="list-group-item">Author: {author}</li>}
+                        <li className="list-group-item">{lang.Item.author[userData.user.lang]}: {author}</li>}
                         {year && 
-                        <li className="list-group-item">Date: {new Date(year).toLocaleDateString()}</li>}
+                        <li className="list-group-item">{lang.Item.date[userData.user.lang]}: {new Date(year).toLocaleDateString()}</li>}
                     </ul>
                 </div>
                 <div className="d-flex card-footer">
+                    {location.pathname === '/collection' 
+                    && (userData.user.userRole === 'admin' || collection.owner === userData.user.id) &&
                     <span 
-                        data-toggle="modal" 
-                        data-target="#item"
                         style={{cursor: 'pointer'}}
-                        onClick={() => {
-                            dispatch(getItem(_id))
-                            if(typeof homeAction === 'function') {
-                                toCollection()
-                            }
+                        data-toggle="modal"
+                        data-target="#editItem"
+                        onClick={(e) => {
+                            dispatch(setItem({...props.itemProps}))                           
                         }}
                     >
-                        More
+                        {lang.Item.edit[userData.user.lang]}
                     </span>
+                    }
                     <Like likes={likes} id={_id} homeAction={homeAction}/>
                 </div>
             </div>      

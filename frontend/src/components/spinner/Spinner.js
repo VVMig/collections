@@ -1,18 +1,13 @@
 import React from 'react'
-import './Spinner.css'
+import './Spinner.scss'
 
-function Spinner({ errorLoading, errorMessage }){
+function Spinner(){
     return (
-        <>
-        {!errorLoading ? <div className="text-center">
-            <div className="spinner-border text-primary spinner-grow-lg" role="status">
+        <div className="spinner d-flex w-100 justify-content-center align-items-center">
+            <div className="spinner-grow text-primary" role="status">
                 <span className="sr-only">Loading...</span>
-           </div>
-        </div> : <div className="alert alert-danger fade-in" role="alert">
-                    {errorMessage}
-                </div>
-        }
-        </>        
+            </div>
+        </div>
     )
 }
 

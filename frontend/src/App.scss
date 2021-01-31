@@ -1,0 +1,16 @@
+#root {
+    min-height: 100vh;
+
+    & button:active, button:focus, input:active, input:focus {
+        outline: none;
+  }
+
+    &  button::-moz-focus-inner {
+        border: 0;
+    }
+}
+
+footer {
+    position: sticky;
+    top:100%
+}

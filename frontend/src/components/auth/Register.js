@@ -8,6 +8,9 @@ import useInputValue from '../../helpers/useInputValue'
 import { setUser } from '../../redux/actions'
 import VkAuth from './VkAuth'
 import Spinner from '../spinner/Spinner'
+import { API_URL } from '../../config'
+
+import lang from '../../lang.json'
 
 function Register(props) {
     const email = useInputValue('email', 'Email adress')
@@ -15,7 +18,7 @@ function Register(props) {
     const passwordCheck = useInputValue('password', 'Confirm password', 'passwordCheck')
     const name = useInputValue('text', 'Name', 'displayName')
     const history = useHistory();
-    const userData = useSelector(state => state.userData)
+    const { userData } = useSelector(state => state.userData)
     const dispatch = useDispatch()
     const [errorLoading, setErrorLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
@@ -27,7 +30,7 @@ function Register(props) {
         e.preventDefault();
         
         try {
-            await Axios.post('/user/register', {
+            await Axios.post(`${API_URL}/api/user/register`, {
                 displayName: name.value(),
                 email: email.value(), 
                 password: password.value(),
@@ -57,7 +60,7 @@ function Register(props) {
         }
 
         try {
-            const response = await Axios.post('/user/login', {email: email.value(), password: password.value(), idToken, vkId})
+            const response = await Axios.post(`${API_URL}/api/user/login`, {email: email.value(), password: password.value(), idToken, vkId})
 
             dispatch(setUser((response.data))) 
 
@@ -80,18 +83,18 @@ function Register(props) {
             <div className="d-flex justify-content-center">
                 <div className="text-center w-50">
                     <form className="needs-validation" onSubmit={register}>
-                        <h1 className="h3 mb-3 font-weight-normal">Sign up</h1>
+                        <h1 className="h3 mb-3 font-weight-normal">{lang.Register.signUp[userData.user.lang]}</h1>
                         <div>
-                            <label htmlFor="namelInput" className="sr-only">Name</label>
+                            <label htmlFor="namelInput" className="sr-only">{lang.Register.name[userData.user.lang]}</label>
                             <input {...name.bind} autoFocus/>
                         </div>
-                        <label htmlFor="emailInput" className="sr-only">Email address</label>
+                        <label htmlFor="emailInput" className="sr-only">{lang.Register.emailAddress[userData.user.lang]}</label>
                         <input {...email.bind}/>
-                        <label htmlFor="passwordInput" className="sr-only">Password</label>
+                        <label htmlFor="passwordInput" className="sr-only">{lang.Register.password[userData.user.lang]}</label>
                         <input {...password.bind}/>
-                        <label htmlFor="passwordCheckInput" className="sr-only">Password confirm</label>
+                        <label htmlFor="passwordCheckInput" className="sr-only">{lang.Register.passwordConfirm[userData.user.lang]}</label>
                         <input {...passwordCheck.bind}/>
-                        <button className="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+                        <button className="btn btn-lg btn-primary btn-block" type="submit">{lang.Register.signUp[userData.user.lang]}</button>
                     </form>
                     <div className="d-flex mt-3">
                         <div className="mr-1">

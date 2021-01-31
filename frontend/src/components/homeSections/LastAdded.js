@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { connect, useDispatch, useSelector } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Navigation, Pagination, A11y } from 'swiper'
 
@@ -8,14 +8,14 @@ import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
 
+import './Slider.scss'
+
 import Item from '../items/Item'
 import { getHome } from '../../redux/actions'
 
 SwiperCore.use([Navigation, Pagination, A11y])
 
-function LastAdded(props){
-    const { lastAdded } = useSelector(state => state.home)
-
+function LastAdded({ lastAdded }){
     const dispatch = useDispatch()
 
     const carouselItem = (e, i) => {
@@ -33,16 +33,30 @@ function LastAdded(props){
 
     return (
         <>
-        {lastAdded.length && 
-        <Swiper
-        navigation
-        pagination={{ clickable: true }}
-        spaceBetween={50}
-        slidesPerView={2}
-        >
-            {lastAdded.map(carouselItem)}
-        </Swiper>
-        }
+            {lastAdded.length > 0 && 
+            <>
+                <h2>Last added</h2>
+                <Swiper
+                navigation
+                pagination={{ clickable: true }}
+                spaceBetween={50}
+                slidesPerView={1}
+                breakpoints={{
+                    576: {
+                        slidesPerView: 2
+                    },
+                    768: {
+                        slidesPerView: 3
+                    },
+                    1200: {
+                        slidesPerView: 4
+                    }
+                }}
+                >
+                    {lastAdded.map(carouselItem)}
+                </Swiper>
+            </>
+            }
         </>
     )
 }

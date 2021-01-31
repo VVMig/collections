@@ -1,0 +1,25 @@
+.swiper-button {
+    &-next{
+        color: rgb(192, 192, 192);
+
+        &:hover {
+            transition: 0.2s linear;
+            color: rgb(146, 146, 146);
+        }
+    }
+
+    &-prev{
+        color: rgb(192, 192, 192);
+
+        &:hover {
+            transition: 0.2s linear;
+            color: rgb(146, 146, 146);
+        }
+    }
+}
+
+.swiper-pagination-bullet {
+    &-active {
+        background-color: rgb(75, 75, 75);
+    }
+}

@@ -1,0 +1,19 @@
+.add-item {
+    cursor: pointer;
+    width: 12rem;
+    min-height: 348px;
+
+    &:hover {
+        border-color: #007bff;
+        transition: 0.2s linear;
+    }
+
+    & .card-body {
+        border-radius: 3px;
+    }
+
+    & span {
+        color: #007bff;
+    }
+}
+

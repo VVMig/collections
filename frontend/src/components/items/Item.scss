@@ -1,0 +1,10 @@
+$itemMinHeight: 348px;
+
+.item {
+    min-height: $itemMinHeight;
+
+    &:hover {
+        border-color: #007bff !important;
+        transition: 0.2s linear;
+    }
+}

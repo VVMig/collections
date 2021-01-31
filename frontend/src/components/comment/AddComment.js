@@ -6,11 +6,14 @@ import * as Icon from 'react-bootstrap-icons'
 import UserPicture from '../userPicture/UserPicture'
 
 import { getItem } from '../../redux/actions'
+import { API_URL } from '../../config'
 
 import './AddComment.css'
 
+import lang from '../../lang.json'
+
 function AddComment(props) {
-    const userData = useSelector(state => state.userData)
+    const { userData } = useSelector(state => state.userData)
     const { item } = useSelector(state => state.item)
     const { collection } = useSelector(state => state.collection.collection)
 
@@ -35,7 +38,7 @@ function AddComment(props) {
         setComment('')
 
         try {
-            await Axios.post('/item/comment', {
+            await Axios.post(`${API_URL}/api/item/comment`, {
                 comment,
                 itemId: item._id,
                 collectionId: collection._id
@@ -61,7 +64,7 @@ function AddComment(props) {
                     <span className="pl-1">{userData.user.displayName}</span>
                 </div>  
                 <div className="d-flex border p-2">
-                    <textarea placeholder="Leave a comment..." value={comment} 
+                    <textarea placeholder={lang.AddComment.leaveComment[userData.user.lang]} value={comment} 
                     onChange={(e) => setComment(e.target.value)} 
                     maxLength="200" 
                     className="form-control mr-1"

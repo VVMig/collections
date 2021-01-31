@@ -32,7 +32,8 @@ module.exports = async function auth(req, res, next) {
             displayName: user.displayName,
             userRole: user.userRole,
             blocked: user.blocked,
-            userPhoto: user.userPhoto
+            userPhoto: user.userPhoto,
+            lang: user.lang
         }
 
         next();

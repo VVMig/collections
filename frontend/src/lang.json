@@ -1,0 +1,324 @@
+{
+    "Home": {
+        "recentlyAdded": {
+            "en": "Recently added",
+            "ru": "Недавно добавленные"
+        },
+        "mostLike": {
+            "en": "Most like",
+            "ru": "Топ лайков"
+        }
+    },
+    "Profile": {
+        "info": {
+            "en": "Info",
+            "ru": "Информация"
+        },
+        "registerDate": {
+            "en": "Register date",
+            "ru": "Дата регистрации"
+        },
+        "role": {
+            "en": "Role",
+            "ru": "Должность"
+        },
+        "collections": {
+            "en": "Collections",
+            "ru": "Коллекции"
+        },
+        "blockUser": {
+            "en": "User has been blocked", 
+            "ru": "Пользователь заблокирован"
+        },
+        "adminPanel": {
+            "en": "Admin panel",
+            "ru": "Админ панель"
+        }
+    },
+    "Search": {
+        "notFound": {
+            "en": "No items found",
+            "ru": "Не найдено не одного предмета"
+        }
+    },
+    "Collections": {
+        "allCollections": {
+            "en": "All collections",
+            "ru": "Все коллекции"
+        }
+    },
+    "Admin": {
+        "permission": {
+            "en": "You don't have permissions for this page",
+            "ru": "У вас нет доступа к этой странице"
+        }
+    },
+    "Header": {
+        "collections": {
+            "en": "Collections",
+            "ru": "Коллекции"
+        },
+        "home": {
+            "en": "Home",
+            "ru": "Главная"
+        },
+        "myCollections": {
+            "en": "My collections",
+            "ru": "Мои коллекции"
+        },
+        "logIn": {
+            "en": "Log in",
+            "ru": "Войти"
+        },
+        "register": {
+            "en": "Register",
+            "ru": "Зарегистрироваться"
+        },
+        "logOut": {
+            "en": "Log out",
+            "ru": "Выйти"
+        }
+    },
+    "AddItemModal": {
+        "itemSettings": {
+            "en": "Item settings",
+            "ru": "Настройки предмета"
+        },
+        "comments": {
+            "en": "Comments",
+            "ru": "Комментарии"
+        },
+        "author": {
+            "en": "Author",
+            "ru": "Автор"
+        },
+        "date": {
+            "en": "Date",
+            "ru": "Дата"
+        },
+        "title": {
+            "en": "Title",
+            "ru": "Название"
+        },
+        "close": {
+            "en": "Close",
+            "ru": "Закрыть"
+        },
+        "addItem": {
+            "en": "Add item",
+            "ru": "Добавить предмет"
+        },
+        "tags": {
+            "en": "Type some tags"
+        }
+    },
+    "Item": {
+        "author": {
+            "en": "Author",
+            "ru": "Автор"
+        },
+        "date": {
+            "en": "Date",
+            "ru": "Дата"
+        },
+        "edit": {
+            "en": "Edit",
+            "ru": "Изменить"
+        }
+    },
+    "ModalItem": {
+        "author": {
+            "en": "Author",
+            "ru": "Автор"
+        },
+        "date": {
+            "en": "Date",
+            "ru": "Дата"
+        }
+    },
+    "FileInput": {
+        "dragAndDrop": {
+            "en": "Drag 'n' drop picture here, or click to select",
+            "ru": "Перетащите нужное изображение или кликните, чтобы выбрать"
+        }
+    },
+    "AddComment": {
+        "leaveComment": {
+            "en": "Leave a comment...",
+            "ru": "Написать комментарий..."
+        }
+    },
+    "AddCollectionModal": {
+        "collectionSettings": {
+            "en": "Collection settings",
+            "ru": "Настройки коллекции"
+        },
+        "comments": {
+            "en": "Comments",
+            "ru": "Комментарии"
+        },
+        "author": {
+            "en": "Author",
+            "ru": "Автор"
+        },
+        "date": {
+            "en": "Date",
+            "ru": "Дата"
+        },
+        "title": {
+            "en": "Title",
+            "ru": "Название"
+        },
+        "topic": {
+            "en": "Topic",
+            "ru": "Тема"
+        },
+        "description": {
+            "en": "Description",
+            "ru": "Описание"
+        },
+        "close": {
+            "en": "Close",
+            "ru": "Закрыть"
+        },
+        "save": {
+            "en": "Save",
+            "ru": "Сохранить"
+        },
+        "addCollection": {
+            "en": "Add collection",
+            "ru": "Добавить коллекцию"
+        }
+    },
+    "CollectionCard": {
+        "explore": {
+            "en": "Explore",
+            "ru": "Просмотреть"
+        }
+    },
+    "Filter": {
+        "author": {
+            "en": "Author",
+            "ru": "Автор"
+        },
+        "date": {
+            "en": "Date",
+            "ru": "Дата"
+        },
+        "title": {
+            "en": "Title",
+            "ru": "Название"
+        },
+        "picture": {
+            "en": "Picture",
+            "ru": "Изображение"
+        },
+        "apply": {
+            "en": "Apply",
+            "ru": "Применить"
+        },
+        "reset": {
+            "en": "Reset",
+            "ru": "Сбросить"
+        }
+    },
+    "Sort": {
+        "author": {
+            "en": "Author",
+            "ru": "Автору"
+        },
+        "date": {
+            "en": "Date",
+            "ru": "Дате"
+        },
+        "title": {
+            "en": "Title",
+            "ru": "Названию"
+        },
+        "comments": {
+            "en": "Comments",
+            "ru": "Комментариям"
+        },
+        "likes": {
+            "en": "Likes",
+            "ru": "Лайкам"
+        },
+        "sort": {
+            "en": "Sort",
+            "ru": "Сортировать"
+        }
+    },
+    "logIn": {
+        "signIn": {
+            "en": "Sign in",
+            "ru": "Войти"
+        },
+        "emailAdress": {
+            "en": "Email address",
+            "ru": "Email адрес"
+        },
+        "password": {
+            "en": "Password",
+            "ru": "Пароль"
+        },
+        "rememberMe": {
+            "en": "Remember me",
+            "ru": "Запомнить меня"
+        }
+    },
+    "Register": {
+        "signUp": {
+            "en": "Sign up",
+            "ru": "Зарегистрироваться"
+        },
+        "emailAddress": {
+            "en": "Email address",
+            "ru": "Email адрес"
+        },
+        "password": {
+            "en": "Password",
+            "ru": "Пароль"
+        },
+        "passwordConfirm": {
+            "en": "Password confirm",
+            "ru": "Подтвердите пароль"
+        },
+        "name": {
+            "en": "Name",
+            "ru": "Имя"
+        }
+    },
+    "EditItemModal": {
+        "itemSettings": {
+            "en": "Item settings",
+            "ru": "Настройки предмета"
+        },
+        "comments": {
+            "en": "Comments",
+            "ru": "Комментарии"
+        },
+        "author": {
+            "en": "Author",
+            "ru": "Автор"
+        },
+        "date": {
+            "en": "Date",
+            "ru": "Дата"
+        },
+        "title": {
+            "en": "Title",
+            "ru": "Название"
+        },
+        "close": {
+            "en": "Close",
+            "ru": "Закрыть"
+        },
+        "saveItem": {
+            "en": "Save",
+            "ru": "Сохранить"
+        },
+        "tags": {
+            "en": "Type some tags"
+        }
+    }
+}

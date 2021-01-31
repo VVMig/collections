@@ -8,20 +8,18 @@ import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
 
-import Item from '../items/Item'
+import HomeItem from '../items/HomeItem'
 import { getHome } from '../../redux/actions'
 
 SwiperCore.use([Navigation, Pagination, A11y])
 
-function MostLike(props){
-    const { mostLike } = useSelector(state => state.home)
-
+function MostLike({ mostLike }){
     const dispatch = useDispatch()
 
     const carouselItem = (e, i) => {
         return (
             <SwiperSlide key={`slide-${i}`} className="d-flex pb-5 pt-5 justify-content-center">
-                <Item itemProps={e} homeAction={like}/>    
+                <HomeItem itemProps={e} homeAction={like}/>    
             </SwiperSlide>
         )
         
@@ -33,15 +31,18 @@ function MostLike(props){
 
     return (
         <>
-        {mostLike.length && 
-        <Swiper
-        navigation
-        pagination={{ clickable: true }}
-        spaceBetween={50}
-        slidesPerView={1}
-        >
-            {mostLike.map(carouselItem)}
-        </Swiper>
+            {mostLike.length > 0 && 
+            <>
+            <h2>Most like</h2>
+            <Swiper
+            navigation
+            pagination={{ clickable: true }}
+            spaceBetween={50}
+            slidesPerView={1}
+            >
+                {mostLike.map(carouselItem)}
+            </Swiper>
+        </>    
         }
         </>
     )

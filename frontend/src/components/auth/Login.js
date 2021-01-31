@@ -9,15 +9,18 @@ import useInputValue from '../../helpers/useInputValue'
 import VkAuth from './VkAuth';
 import { setUser } from '../../redux/actions'
 import Spinner from '../spinner/Spinner'
+import { API_URL } from '../../config'
 
+import lang from '../../lang.json'
 
 function Login(props) {
+    const { userData } = useSelector(state => state.userData)
+
     const email = useInputValue('email', 'Email adress')
     const password = useInputValue('password')
     const remember = createRef(false)
     const dispatch = useDispatch()
     const history = useHistory()
-    const userData = useSelector(state => state.userData)
     const [errorLoading, setErrorLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
 
@@ -39,7 +42,7 @@ function Login(props) {
         }
         
         try {
-            const response = await Axios.post('/user/login', {email: email.value(), password: password.value(), idToken, vkId})
+            const response = await Axios.post(`${API_URL}/api/user/login`, {email: email.value(), password: password.value(), idToken, vkId})
              dispatch(setUser((response.data))) 
              if(checked){
                 localStorage.setItem('token', response.data.token)
@@ -59,17 +62,17 @@ function Login(props) {
             <div className="d-flex justify-content-center">      
                 <div className="text-center w-50">
                     <form className="form-signin" onSubmit={(e) => login(e)}>
-                        <h1 className="h3 mb-3 font-weight-normal">Sign in</h1>
-                        <label htmlFor="emailInput" className="sr-only">Email address</label>
+                        <h1 className="h3 mb-3 font-weight-normal">{lang.logIn.signIn[userData.user.lang]}</h1>
+                        <label htmlFor="emailInput" className="sr-only">{lang.logIn.emailAdress[userData.user.lang]}</label>
                         <input {...email.bind} autoFocus/>
-                        <label htmlFor="passwordInput" className="sr-only">Password</label>
+                        <label htmlFor="passwordInput" className="sr-only">{lang.logIn.password[userData.user.lang]}</label>
                         <input {...password.bind}/>
                         <div className="checkbox mb-3">
                             <label>
-                                <input type="checkbox" value="remember-me" ref={remember}/> Remember me
+                                <input type="checkbox" value="remember-me" ref={remember}/> {lang.logIn.rememberMe[userData.user.lang]}
                             </label>
                         </div>
-                        <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                        <button className="btn btn-lg btn-primary btn-block" type="submit">{lang.logIn.signIn[userData.user.lang]}</button>
                     </form>       
                     <div className="d-flex mt-3">
                         <div className="mr-1">

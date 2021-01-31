@@ -1,0 +1,48 @@
+@mixin pictureSize($size: 300px) {
+    .most-like {
+        & .main-picture {
+            height: $size;
+        }
+    }
+}
+
+.main-picture {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(230, 230, 252);
+    transition: 0.2s linear;
+
+    &:hover {
+        transition: 0.2s linear;
+        background-position: 0 30%;
+    }
+}
+
+@include pictureSize(120px);
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) { 
+    @include pictureSize(210px);
+
+ }
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {  
+    @include pictureSize(210px);
+
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) { 
+    @include pictureSize(250px);
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { 
+    @include pictureSize();
+}

@@ -1,18 +1,27 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import Item from '../items/Item';
 
 import './Search.scss'
 
-function Home(props){
-    const { items } = props
+import lang from '../../lang.json'
+
+function Search(props){
+    const { items, searchText } = props
+    const { userData } = useSelector(state => state.userData)   
 
     return (
         <>
             <div className="d-flex flex-wrap search-items-container">
                 {items.length ?
-                items.map((e) => <Item itemProps={e} key={e._id}/>):
-                'No items with that query'}
+                <div className="d-flex flex-column">
+                    <h4>Here's what we found for {searchText}</h4>
+                    <div className="d-flex flex-wrap" style={{gap: '2rem'}}>
+                        {items.map((e) => <Item itemProps={e} key={e._id}/>)}
+                    </div>
+                </div>
+                :
+                'Nothing was found for your request :('}
             </div>
         </>
     )
@@ -20,4 +29,4 @@ function Home(props){
 
 const mapStateToProps = state => state.search;
 
-export default connect(mapStateToProps, null)(Home)
+export default connect(mapStateToProps, null)(Search)

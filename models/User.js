@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
     },
     collections: {
         type: [String]
+    },
+    lang: {
+        type: String,
+        default: "en"
     }
 })
 

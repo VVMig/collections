@@ -1,15 +1,24 @@
-import React, { useEffect } from 'react'
-import { connect, useDispatch } from 'react-redux'
-import { getHome } from '../../redux/actions'
+import React, { useCallback, useEffect } from 'react'
+import { connect, useDispatch, useSelector } from 'react-redux'
+import { clearErrorAll, getHome, startLoading } from '../../redux/actions'
 
 import LastAdded from '../homeSections/LastAdded'
 import Tags from '../homeSections/Tags'
 import MostLike from '../homeSections/MostLike'
 
+import lang from '../../lang.json'
+import Spinner from '../spinner/Spinner'
+
 function Home(props){
+    const { loading } = useSelector(state => state.error)
+    const home = useSelector(state => state.home)
+
     const dispatch = useDispatch()
 
-    dispatch(getHome())
+    useEffect(() => {
+        dispatch(clearErrorAll())
+        dispatch(getHome(true))
+    }, [dispatch])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -21,17 +30,20 @@ function Home(props){
 
     return (
         <>
-            <Tags/>
-            <div className="row text-center">
-                <div className="col-8">
-                    <h2>Recently added</h2>
-                    <LastAdded/>
+            {loading && <Spinner/>}
+            {!loading &&
+            <>
+                <Tags/>
+                <div className="row text-center">
+                    <div className="col-12">
+                        <LastAdded/>
+                    </div>
+                    <div className="col-12 most-like">
+                        <MostLike/>
+                    </div>
                 </div>
-                <div className="col-4">
-                    <h2>Most like</h2>
-                    <MostLike/>
-                </div>
-            </div>
+            </>
+            }
         </>
     )
 }

@@ -1,46 +1,35 @@
-import React, { useEffect, useState } from 'react'
-import Axios from 'axios'
+import React, { useCallback, useEffect } from 'react'
 
-import Spinner from '../spinner/Spinner'
-import Card from './CollectionCard'
-
-import './CollectionsItems.css'
+import SpinnerComponent from '../spinner/SpinnerComponent'
+import CardCollection from './CardCollection'
+import './CollectionsItems.scss'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllCollections } from '../../redux/actions'
+import EditModal from './EditCollectionModal'
 
 function CollectionsItems(props) {
     const { id } = props 
-    const [collections, setCollections] = useState([])
-    const [errorLoading, setErrorLoading] = useState(false)
-    const [errorMessage, setErrorMessage] = useState('')
+    const dispatch = useDispatch()
+
+    const { collections, loading } = useSelector(state => state.allCollections)
 
     useEffect(() => {
-        const getCollections = async () => {
-            try {
-                const response = await Axios.get('/collections/', {
-                    params: {
-                        id
-                    }
-                })
-
-                setCollections(response.data)
-            } catch (error) {
-                setErrorMessage(error.response ? error.response.data.message : 'Connection error. Please try again later:(')
-                setErrorLoading(true)
-            }
-        }
-
-        getCollections()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id])
+        dispatch(getAllCollections(id))    
+    }, [dispatch, id])
 
     return (
         <>
-            {!collections.length ? <Spinner errorLoading={errorLoading} errorMessage={errorMessage}/>
-            :
-            <div className="d-flex collections-container flex-wrap justify-content-center justify-content-md-start">
+            {loading && 
+            <div className="text-center mt-2">
+                <SpinnerComponent/>
+            </div>
+            }
+            {collections.length && !loading && 
+            <div className="d-flex collections-container flex-wrap justify-content-center  mt-3">
                 {collections.map((e) => (
-                    <Card key={e._id} {...e}/>
+                    <CardCollection key={e._id} {...e}/>
                 ))}
+                <EditModal id={id}/>
             </div>}
         </>
     )

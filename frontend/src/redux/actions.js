@@ -1,13 +1,90 @@
 import Axios from 'axios'
+import { API_URL } from '../config'
 
 import { GET_USER, SET_USER, RESET_USER, SET_ERROR, DELETE_USER, 
     SET_ADMIN, REMOVE_ADMIN, BLOCK_USER, UNBLOCK_USER, 
-    CLEAR_ERROR, SET_ITEM, GET_COLLECTION, GET_ITEM, SORT_COLLECTION, GET_HOME, SET_SEARCH } from "./types";
+    CLEAR_ERROR, SET_ITEM, GET_COLLECTION, GET_ITEM, SORT_COLLECTION, 
+    GET_HOME, SET_SEARCH, SWITCH_LANG, GET_ALLCOLLECTIONS, START_LOADING_PAGE, 
+    END_LOADING_PAGE, ERROR_CLEARALL, SET_NOTIFY, START_LOADING_COLLECTIONS, END_LOADING_COLLECTIONS } from "./types";
+
+
+export function clearErrorAll() {
+    return {
+        type: ERROR_CLEARALL,
+        payload: {
+            error: '',
+            notify: false,
+            loading: false
+        }
+    }        
+}
+
+export function setNotify(state) {
+    return {
+        type: SET_NOTIFY,
+        payload: state
+    }
+}
+
+export function getAllCollections(id) {
+    return async dispatch => {
+        try {
+            dispatch({type: START_LOADING_COLLECTIONS})
+            const response = await Axios.get(`${API_URL}/api/collections/`, {
+                params: {
+                    id
+                }
+            })
+            dispatch({
+                type: GET_ALLCOLLECTIONS,
+                payload: response.data
+            })
+        } catch (error) {
+            dispatch(setError(error))
+        }
+        finally {
+            dispatch({type: END_LOADING_COLLECTIONS})
+        }
+    }
+}
+
+export function switchLang(lang) {
+    return async (dispatch, getState) => {
+        const token = getState().userData.userData.token
+
+        if(!token) {
+            dispatch({
+                type: SWITCH_LANG,
+                payload: lang
+            })
+
+            localStorage.setItem('lang', lang)
+        }
+
+        try {
+            const response = await Axios.post(`${API_URL}/api/user/switchLang`, {
+                lang
+            }, {
+                headers: {
+                    'x-auth-token': token
+                }
+            })
+    
+            dispatch({
+                type: SWITCH_LANG,
+                payload: response.data
+            })
+        } catch (error) {
+            
+        }
+
+    }
+}
 
 export function setSearch(searchText) {
     return async dispatch => {
         try {
-            const response = await Axios.get('/item/search', {
+            const response = await Axios.get(`${API_URL}/api/item/search`, {
                 params: {
                     searchText
                 }
@@ -29,17 +106,27 @@ export function setSearch(searchText) {
     }
 }
 
-export function getHome() {
-    return async dispatch => {
+export function getHome(firstLoad) {
+    return async (dispatch, getState) => {
+        if(firstLoad)
+            dispatch(startLoadingPage())
         try {
-            const response = await Axios.get('/user/home')
+            if(getState().error.error) {
+                return
+            }
+
+            const response = await Axios.get(`${API_URL}/api/user/home`)
 
             dispatch({
                 type: GET_HOME,
                 payload: response.data
             })
         } catch (error) {
-            console.log(error)
+            dispatch(setError(error))
+        }
+        finally {
+            if(firstLoad)
+                dispatch(endLoadingPage())
         }
     }
 }
@@ -52,9 +139,19 @@ export function sortCollection(key) {
 }
 
 export function getCollection(id) {
-    return async dispatch => {
+    return async (dispatch, getState) => {
         try {
-            const response = await Axios.get('/collections/collection', {
+            if(getState().error.error) {
+                return
+            }
+
+            if(!getState().collection.collection.collection) {
+                dispatch(startLoadingPage()) 
+            } else if(getState().collection.collection.collection._id !== id) {
+                dispatch(startLoadingPage()) 
+            }           
+
+            const response = await Axios.get(`${API_URL}/api/collections/collection`, {
                 params: {
                     id
                 }
@@ -63,9 +160,12 @@ export function getCollection(id) {
             dispatch({
                 type: GET_COLLECTION,
                 payload: response.data
-            })
+            })            
         } catch (error) {
-            
+            dispatch(setError(error))
+        }
+        finally {
+            dispatch(endLoadingPage())
         }
     }
 }
@@ -89,7 +189,7 @@ export function setItem(item) {
 export function getItem(id) {
     return async dispatch => {
         try {
-            const response = await Axios.get('/item/', {
+            const response = await Axios.get(`${API_URL}/api/item/`, {
                 params: {
                     id
                 }
@@ -109,7 +209,7 @@ export function blockUser(token, users) {
     return dispatch => {
         users.forEach(async (id) => {            
             try {
-                await Axios.post(`/user/block`, {id}, {
+                await Axios.post(`${API_URL}/api/user/block`, {id}, {
                     headers: {
                         'x-auth-token': token
                     }
@@ -132,7 +232,7 @@ export function deleteUser(token, users) {
     return async dispatch => {
         users.forEach(async (id) => {
             try {
-                await Axios.delete(`/user/delete`, {
+                await Axios.delete(`${API_URL}/api/user/delete`, {
                     params: {
                         id
                     },
@@ -160,7 +260,7 @@ export function setAdmin(token, users) {
     return dispatch => {
         users.forEach(async (id) => {            
             try {
-                await Axios.post(`/user/setAdmin`, {id}, {
+                await Axios.post(`${API_URL}/api/user/setAdmin`, {id}, {
                     headers: {
                         'x-auth-token': token
                     }
@@ -183,7 +283,7 @@ export function unblockUser(token, users) {
     return dispatch => {
         users.forEach(async (id) => {            
             try {
-                await Axios.post(`/user/unblock`, {id}, {
+                await Axios.post(`${API_URL}/api/user/unblock`, {id}, {
                     headers: {
                         'x-auth-token': token
                     }
@@ -203,24 +303,35 @@ export function unblockUser(token, users) {
 }
 
 export function setError(error) {
-    if(!error) {
-        error = 'Connection error. Please try again later:('
-    }
+    let text = ''
 
-    return dispatch => {
-        dispatch({
-            type: SET_ERROR,
-            payload: error
-        })
+    if(error.response) {
+        text = error.response.data.message || error.response.data.error.message
+    }
+    else text = 'Connection error. Please try again later:('
+
+    return {
+        type: SET_ERROR,
+        payload: text
     }
 }
 
 export function clearError() {
-    return dispatch => {
-        dispatch({
+    return {
             type: CLEAR_ERROR,
             payload: ''
-        })
+        }
+}
+
+export function startLoadingPage() {
+    return {
+        type: START_LOADING_PAGE
+    }
+}
+
+export function endLoadingPage() {
+    return {
+        type: END_LOADING_PAGE
     }
 }
 
@@ -228,7 +339,7 @@ export function removeAdmin(token, users, err) {
     return dispatch => {
         users.forEach(async (id) => {            
             try {
-                await Axios.post(`/user/removeAdmin`, {id}, {
+                await Axios.post(`${API_URL}/api/user/removeAdmin`, {id}, {
                     headers: {
                         'x-auth-token': token
                     }
@@ -257,7 +368,9 @@ export function resetUser() {
             type: RESET_USER,
             payload: {
                 token: undefined,
-                user: undefined
+                user: {
+                    lang: 'en'
+                }
             }
         })
     }
@@ -274,13 +387,13 @@ export function getUser() {
 
         try {
             const tokenRes = await Axios.post(
-            "user/verifyToken",
+            `${API_URL}/api/user/verifyToken`,
             null,
             { headers: { "x-auth-token": token } }
             )
 
             if (tokenRes.data) {
-            const userRes = await Axios.get("user/", {
+            const userRes = await Axios.get(`${API_URL}/api/user/`, {
                 headers: { "x-auth-token": token },
             });
             
