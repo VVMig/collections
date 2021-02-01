@@ -37,7 +37,7 @@ function Register(props) {
                 passwordCheck: passwordCheck.value(),
             })
     
-            history.push('/login')        
+            history.push('/login')
         } catch (error) {
             setErrorLoading(true)
             setErrorMessage('')
@@ -70,6 +70,7 @@ function Register(props) {
             else sessionStorage.setItem('token', response.data.token)
 
             history.push('/')
+            window.location.reload()
         } catch (error) {
             setErrorLoading(true)
             setErrorMessage('')

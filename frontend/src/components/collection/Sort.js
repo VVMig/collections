@@ -19,7 +19,7 @@ function Sort() {
 
     return (
         <div className="d-flex align-items-center mb-3 w-100 px-2 p-sm-0">
-            <span>{lang.Sort.sort[userData.user.lang]}</span>
+            <span className={`${userData.user.darkMode && 'text-light'}`}>{lang.Sort.sort[userData.user.lang]}</span>
             <select className="form-control ml-2" value={selectedSort} id="inputGroupSelect01" onChange={(e) => setSelectedSort(e.target.value)}>
                 <option value="Title">{lang.Sort.title[userData.user.lang]}</option>
                 <option value="Likes">{lang.Sort.likes[userData.user.lang]}</option>

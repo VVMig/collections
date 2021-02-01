@@ -128,9 +128,9 @@ function Collection(props){
                 to={`/profile?id=${collection.owner}`}
                 >Back to profile</Link>
                 <div className="d-flex flex-column align-items-center">
-                    <h2>{collection.title}</h2>
+                    <h2 className={`${userData.user.darkMode && 'text-light'}`}>{collection.title}</h2>
                     <h3 className="badge badge-primary">{collection.topic}</h3>
-                    <ReactMarkdown source={collection.description}/>
+                    <ReactMarkdown className={`${userData.user.darkMode && 'text-light'}`} source={collection.description}/>
                 </div>
                 <hr/>
                 <div className="row">

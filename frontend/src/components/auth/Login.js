@@ -48,7 +48,8 @@ function Login(props) {
                 localStorage.setItem('token', response.data.token)
             }
             else sessionStorage.setItem('token', response.data.token)
-             history.push('/')
+            history.push('/')
+            window.location.reload()
         } catch (error) {
             setErrorLoading(true)
             setErrorMessage('')
