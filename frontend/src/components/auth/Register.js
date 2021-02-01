@@ -5,9 +5,8 @@ import { GoogleLogin } from 'react-google-login'
 import { connect, useDispatch, useSelector } from 'react-redux'
 
 import useInputValue from '../../helpers/useInputValue'
-import { setUser } from '../../redux/actions'
+import { setUser, setError } from '../../redux/actions'
 import VkAuth from './VkAuth'
-import Spinner from '../spinner/Spinner'
 import { API_URL } from '../../config'
 
 import lang from '../../lang.json'
@@ -20,8 +19,7 @@ function Register(props) {
     const history = useHistory();
     const { userData } = useSelector(state => state.userData)
     const dispatch = useDispatch()
-    const [errorLoading, setErrorLoading] = useState(false)
-    const [errorMessage, setErrorMessage] = useState('')
+
 
     if(userData.token)
         history.push('/')
@@ -39,18 +37,13 @@ function Register(props) {
     
             history.push('/login')
         } catch (error) {
-            setErrorLoading(true)
-            setErrorMessage('')
-            setErrorMessage(error.response.data.error.message)
+            dispatch(setError(error))
         }
     }
 
     async function login(e, resGoogle, resVk) {
         if(e)
             e.preventDefault()
-
-        setErrorLoading(false)
-        setErrorMessage('Loading...')
 
         const idToken = resGoogle && resGoogle.tokenId
         const checked = false;
@@ -72,15 +65,12 @@ function Register(props) {
             history.push('/')
             window.location.reload()
         } catch (error) {
-            setErrorLoading(true)
-            setErrorMessage('')
-            setErrorMessage(error.response ? error.response.data.error.message : 'Connection error. Please try again later:(')
+            dispatch(setError(error))
         }     
     }
 
     return (
         <>
-            {errorMessage && <Spinner errorLoading={errorLoading} errorMessage={errorMessage}/>}
             <div className="d-flex justify-content-center">
                 <div className="text-center w-50">
                     <form className="needs-validation" onSubmit={register}>
