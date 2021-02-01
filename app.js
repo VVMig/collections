@@ -4,7 +4,6 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const PORT = process.env.PORT || 4000
 const path = require('path')
-const tags = require('./models/Tags')
 
 const user = require('./routes/userRouter')
 const collections = require('./routes/collectionsRouter')

@@ -5,7 +5,7 @@ import Axios from 'axios'
 
 import { useSelector, useDispatch } from 'react-redux'
 
-import { getCollection, setNotify, clearErrorAll, startLoadingPage, setError, endLoadingPage } from '../../redux/actions'
+import { getCollection, setNotify, clearErrorAll, setError } from '../../redux/actions'
 
 import FileInput from '../fileInput/FileInput'
 import { API_URL } from '../../config'

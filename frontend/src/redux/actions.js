@@ -5,8 +5,38 @@ import { GET_USER, SET_USER, RESET_USER, SET_ERROR, DELETE_USER,
     SET_ADMIN, REMOVE_ADMIN, BLOCK_USER, UNBLOCK_USER, 
     CLEAR_ERROR, SET_ITEM, GET_COLLECTION, GET_ITEM, SORT_COLLECTION, 
     GET_HOME, SET_SEARCH, SWITCH_LANG, GET_ALLCOLLECTIONS, START_LOADING_PAGE, 
-    END_LOADING_PAGE, ERROR_CLEARALL, SET_NOTIFY, START_LOADING_COLLECTIONS, END_LOADING_COLLECTIONS } from "./types";
+    END_LOADING_PAGE, ERROR_CLEARALL, SET_NOTIFY, START_LOADING_COLLECTIONS, END_LOADING_COLLECTIONS, TOGGLE_MODE } from "./types";
 
+
+export function toggleMode(mode) {
+    return async (dispatch, getState) => {
+        try {
+            if(!getState().userData.userData.token) {
+                dispatch({
+                    type: TOGGLE_MODE,
+                    payload: mode
+                })
+                return
+            }
+
+            await Axios.post(`${API_URL}/api/user/darkMode`, {
+                mode
+            }, {
+                headers: {
+                    'x-auth-token': getState().userData.userData.token
+                }
+            })
+    
+            dispatch({
+                type: TOGGLE_MODE,
+                payload: mode
+            })
+        } catch (error) {
+            dispatch(setError(error))
+        }
+
+    }
+}
 
 export function clearErrorAll() {
     return {

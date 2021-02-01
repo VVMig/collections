@@ -13,6 +13,7 @@ const userValid = require('../helpers/auth_validation')
 
 const auth = require('../middleware/auth')
 const admin = require('../middleware/admin');
+const { findByIdAndUpdate } = require('../models/User');
 
 router.post('/register', async (req, res) => {
     let {email, password, passwordCheck, displayName} = req.body
@@ -166,6 +167,20 @@ router.post('/switchLang', auth, async (req, res) => {
         await user.save()
 
         res.json(lang)
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
+router.post('/darkMode', auth, async (req, res) => {
+    try {
+        const { mode } = req.body
+
+        await User.findByIdAndUpdate(req.user.id, {darkMode: mode})
+
+        req.user.darkMode = mode
+
+        res.json(req.user)
     } catch (error) {
         res.status(500).json({ error })
     }

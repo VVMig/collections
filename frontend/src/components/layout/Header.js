@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom'
 import * as Icon from 'react-bootstrap-icons'
 
 import UserPicture from '../userPicture/UserPicture'
-import { isLogin, resetUser, setSearch } from '../../redux/actions'
+import { isLogin, resetUser, setSearch, toggleMode } from '../../redux/actions'
 
 import './Header.scss'
 
@@ -43,7 +43,7 @@ function Header(props){
 
     return (
         <header>
-            <nav className="navbar navbar-expand-md navbar-light bg-light">
+            <nav className={`navbar navbar-expand-md navbar-${!userData.user.darkMode ? 'light bg-light' : 'dark bg-dark'}`}>
                 <Link className="navbar-brand" to="/">{lang.Header.collections[userData.user.lang]}</Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -59,6 +59,10 @@ function Header(props){
                         <input className="form-control w-100" value={searchTextInput} onChange={(e) => setSearchTextInput(e.target.value)} type="text" placeholder="Search"/>
                         <span onClick={onSearch}><Icon.Search/></span>
                     </form>
+                    <div class="custom-control custom-switch ml-3">
+                        <input checked={userData.user.darkMode} onChange={(e) => dispatch(toggleMode(e.target.checked))} type="checkbox" class="custom-control-input" id="customSwitch1"/>
+                        <label class="custom-control-label" for="customSwitch1"></label>
+                    </div>
                     {!dispatch(isLogin) && !userData.token?
                     <div className="d-flex flex-column ml-md-3 align-items-md-center">
                         <Link to="/login">{lang.Header.logIn[userData.user.lang]}</Link>

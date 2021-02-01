@@ -1,6 +1,10 @@
 header {
     z-index: 2;
 
+    & nav {
+        transition: 0.2s linear;
+    }
+
     & .dropdown-toggle {
         border-radius: 50%;
     }
@@ -28,6 +32,36 @@ header {
 
     & .avatar {
         display: inline-flex;
+    }
+
+    & .custom-control-input:focus ~ .custom-control-label::before {
+        box-shadow:none !important;
+    }
+
+    & .custom-control-input {
+        &:checked~{
+            & .custom-control-label {
+                &::before {
+                    color: #fff;
+                    border-color: rgb(82, 82, 82);
+                    background-color: rgb(255, 255, 255);
+                }
+                &::after {
+                    background-color: rgb(82, 82, 82) !important;
+                }
+            }
+        }       
+    }
+
+    & .custom-control-label {
+        &::before {
+            color: #fff;
+            border-color: #ffffff;
+            background-color: rgb(82, 82, 82);
+        }
+        &::after {
+            background-color: #ffffff !important;
+        }
     }
 }
 

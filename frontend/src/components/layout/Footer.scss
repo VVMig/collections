@@ -1,4 +1,8 @@
-.select-lang {
-    width: 40px;
-    padding: 0;
+footer {
+    & .select-lang {
+        width: 40px;
+        padding: 0;
+    }
+    transition: 0.2s linear;
 }
+

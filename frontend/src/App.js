@@ -1,7 +1,8 @@
 import './App.scss';
 import { useEffect } from 'react'
-import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { connect, useDispatch } from 'react-redux'
+import $ from 'jquery'
 
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
@@ -18,12 +19,18 @@ import { getUser } from './redux/actions';
 import AlertError from './components/alerts/AlertError';
 import AlertStatus from './components/alerts/AlertStatus';
 
-function App() {
+function App({ userData }) {
   const dispatch = useDispatch()
   
   useEffect(() => {
     dispatch(getUser())
   }, [dispatch])
+
+  useEffect(() => {
+    if(userData.user.darkMode)
+      $('#root').addClass('dark')
+    else $('#root').removeClass('dark')  
+  }, [userData])
 
   return (
       <BrowserRouter>

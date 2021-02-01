@@ -31,11 +31,13 @@ function ModalItem(props) {
 
     useEffect(() => {
         if(item_id)
-            $(modal.current).modal('show')
-        if(!item_id)
-            $(modal.current).modal('hide') 
-            
-        console.log(item_id)    
+            $('#item').modal('show')
+        if(!item_id) {
+            history.push(`/collection?collection_id=${collection._id}`)
+            $('#item').modal('hide')             
+
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [item_id])   
 
     const dispatch = useDispatch()
@@ -52,8 +54,9 @@ function ModalItem(props) {
     })
 
     function clearItem() {
-        $(modal.current).on('hide.bs.modal', (e) => {
-            history.push(`/collection?collection_id=${collection._id}`)
+        $('#item').on('hide.bs.modal', (e) => {
+            
+            console.log('hide')
         })
     }
 

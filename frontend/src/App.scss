@@ -3,10 +3,20 @@
 
     & button:active, button:focus, input:active, input:focus {
         outline: none;
-  }
+    }
 
     &  button::-moz-focus-inner {
         border: 0;
+    }
+
+    transition: 0.2s linear;
+
+}
+
+.dark {
+    background-color: #0d1117;
+    & h2 {
+        color: #ffffff;
     }
 }
 

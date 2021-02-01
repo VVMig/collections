@@ -56,16 +56,19 @@ function Profile({ userData }) {
             <>
                 <div className="d-flex mt-3 align-items-center flex-md-row flex-column" style={{gap: '3rem'}}>
                     <div className="d-flex flex-column">
-                        <div className="bg-light text-center p-3" style={{borderRadius: 10}}>
+                        <div className={`text-center p-3 ${userData.user.darkMode && 'text-light bg-dark'}`} style={{borderRadius: 10}}>
                             <UserPicture picture={userProfile.user.userPhoto} name={userProfile.user.displayName} styles={{width: 180, height: 180, fontSize: '5rem'}}/>
                             <h4>{userProfile.user.displayName}</h4>
                             <span>{userProfile.user.userRole}</span>
                         </div>
-                        {userData.user.userRole === 'admin' && <div className="bg-light text-center p-3 mt-1" style={{borderRadius: 10}}>
-                            <Link to="/admin" className="btn btn-primary">Admin panel</Link>
+                        {userData.user.userRole === 'admin' && 
+                        <div 
+                        className={`bg-${userData.user.darkMode ? 'dark' : 'light'} text-center p-3 mt-1`} 
+                        style={{borderRadius: 10}}>
+                            <Link to="/admin" className={`btn btn-${!userData.user.darkMode ? 'dark' : 'light'}`}>Admin panel</Link>
                         </div>}
                     </div>
-                    <div className="bg-light p-3 w-100" style={{borderRadius: 10}}>
+                    <div className={`bg-${userData.user.darkMode ? 'dark' : 'light'} p-3 w-100`} style={{borderRadius: 10}}>
                         <h2>About</h2>
                         <ul className="list-group list-group-flush">
                             <li className="list-group-item">Email: {userProfile.user.email}</li>

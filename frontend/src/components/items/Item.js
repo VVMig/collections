@@ -1,12 +1,11 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { useLocation } from 'react-router-dom'
-import $ from 'jquery'
 import {  useDispatch, useSelector } from 'react-redux'
 import Axios from 'axios'
 import Like from './ItemLike'
 import MainPicture from '../mainPicture/MainPicture'
 
-import { clearErrorAll, getCollection, getItem, setError, setItem, setNotify } from '../../redux/actions'
+import { clearErrorAll, getCollection, setError, setItem, setNotify } from '../../redux/actions'
 import { useHistory } from 'react-router-dom'
 import * as Icon from 'react-bootstrap-icons'
 

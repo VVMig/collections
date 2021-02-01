@@ -9,7 +9,6 @@ import Spinner from '../spinner/Spinner';
 
 function Search(props){
     const { items, searchText } = props
-    const { userData } = useSelector(state => state.userData)   
     const { loading } = useSelector(state => state.error)
     
 

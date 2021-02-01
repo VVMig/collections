@@ -1,1 +1,1 @@
-export const API_URL = 'https://collections-itransition.herokuapp.com/'
+export const API_URL = 'https://collections-itransition.herokuapp.com'

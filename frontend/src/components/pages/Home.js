@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
-import { clearErrorAll, getHome, startLoading } from '../../redux/actions'
+import { clearErrorAll, getHome } from '../../redux/actions'
 
 import LastAdded from '../homeSections/LastAdded'
 import Tags from '../homeSections/Tags'
@@ -11,7 +11,6 @@ import Spinner from '../spinner/Spinner'
 
 function Home(props){
     const { loading } = useSelector(state => state.error)
-    const home = useSelector(state => state.home)
 
     const dispatch = useDispatch()
 
@@ -35,7 +34,7 @@ function Home(props){
             <>
                 <Tags/>
                 <div className="row text-center">
-                    <div className="col-12">
+                    <div className="col-12 ">
                         <LastAdded/>
                     </div>
                     <div className="col-12 most-like">
