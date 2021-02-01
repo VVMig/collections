@@ -13,6 +13,7 @@ import { API_URL } from '../../config'
 import lang from '../../lang.json'
 
 import './AddItem.scss'
+import { END_LOADING_COLLECTION, START_LOADING_COLLECTION } from '../../redux/types'
 
 const baseTagifySettings = {
     blacklist: ["xxx", "yyy", "zzz"],
@@ -47,7 +48,7 @@ function AddItemModal(props) {
     async function addItem() {
         try {
             dispatch(clearErrorAll())
-            dispatch(startLoadingPage())
+            dispatch({type: START_LOADING_COLLECTION})
             dispatch(setNotify(true))
 
             await Axios.post(`${API_URL}/api/item/add`, {
@@ -68,7 +69,7 @@ function AddItemModal(props) {
             dispatch(setError(error))
         }
         finally {
-            dispatch(endLoadingPage())
+            dispatch({type: END_LOADING_COLLECTION})
         }
     }
 

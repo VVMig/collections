@@ -5,14 +5,18 @@ import Item from '../items/Item';
 import './Search.scss'
 
 import lang from '../../lang.json'
+import Spinner from '../spinner/Spinner';
 
 function Search(props){
     const { items, searchText } = props
     const { userData } = useSelector(state => state.userData)   
+    const { loading } = useSelector(state => state.error)
+    
 
     return (
         <>
-            <div className="d-flex flex-wrap search-items-container">
+            {loading && <Spinner/>}
+            {!loading && <div className="d-flex flex-wrap search-items-container">
                 {items.length ?
                 <div className="d-flex flex-column">
                     <h4>Here's what we found for {searchText}</h4>
@@ -22,7 +26,7 @@ function Search(props){
                 </div>
                 :
                 'Nothing was found for your request :('}
-            </div>
+            </div>}
         </>
     )
 }

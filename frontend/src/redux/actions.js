@@ -84,14 +84,16 @@ export function switchLang(lang) {
 export function setSearch(searchText) {
     return async dispatch => {
         try {
+            dispatch(startLoadingPage())
+
             const response = await Axios.get(`${API_URL}/api/item/search`, {
                 params: {
                     searchText
                 }
             })
 
-            localStorage.setItem('search-items', JSON.stringify(response.data))
-            localStorage.setItem('search-text', searchText)
+            sessionStorage.setItem('search-items', JSON.stringify(response.data))
+            sessionStorage.setItem('search-text', searchText)
 
             dispatch({
                 type: SET_SEARCH,
@@ -101,7 +103,10 @@ export function setSearch(searchText) {
                 }
             })
         } catch (error) {
-            console.log(error)
+            dispatch(setError(error))
+        }
+        finally {
+            dispatch(endLoadingPage())
         }
     }
 }

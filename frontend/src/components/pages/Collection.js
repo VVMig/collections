@@ -11,7 +11,7 @@ import Sort from '../collection/Sort'
 import Filter from '../collection/Filter'
 import Spinner from '../spinner/Spinner'
 
-import { clearErrorAll, getCollection } from '../../redux/actions'
+import { clearErrorAll, getCollection, getItem } from '../../redux/actions'
 import lang from '../../lang.json'
 
 import './Collection.scss'
@@ -24,12 +24,20 @@ function Collection(props){
     const { userData } = useSelector(state => state.userData)
     const { collection, items } = useSelector(state => state.collection.collection)
     const { sortOptions } = useSelector(state => state.collection)
-    const { loading, error, notify } = useSelector(state => state.error)
+    const { loading, error } = useSelector(state => state.error)
 
     const dispatch = useDispatch()
 
     const location = useLocation()
     const id = new URLSearchParams(location.search).get('collection_id')
+    const item_id = new URLSearchParams(location.search).get('item_id')
+
+    useEffect(() => {
+        if(item_id) {
+            dispatch(getItem(item_id))
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [item_id])
 
     useEffect(() => {
         dispatch(clearErrorAll())
@@ -84,6 +92,10 @@ function Collection(props){
     }
 
     function compare(a, b) {
+        if(!a || !b){
+            return
+        }
+
         switch (sortOptions.key) {
             case 'likes':
                 if (a.likes.number > b.likes.number) return sortOptions.ascending ? 1 : -1; 

@@ -1,8 +1,8 @@
 import { SET_SEARCH } from "./types";
 
 const initialState = {
-    items: JSON.parse(localStorage.getItem('search-items')) || {}, 
-    searchText: localStorage.getItem('search-text') || ''
+    items: JSON.parse(sessionStorage.getItem('search-items')) || {}, 
+    searchText: sessionStorage.getItem('search-text') || ''
 }
 
 export const searchReducer = (state = initialState, action) => {

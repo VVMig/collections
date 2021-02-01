@@ -27,6 +27,36 @@ router.get('/', async (req, res) => {
 
 })
 
+router.delete('/delete', auth, async (req, res) => {
+    try {
+        const { id, collection_id } = req.query
+
+        if(!id || !collection_id) {
+            return res.status(400).json({ message: 'Incorrect data of item' })
+        }
+
+        const collection = await Collection.findById(collection_id)
+
+        if(!collection) {
+            return res.status(404).json({ message: 'Collection do not exist' })
+        }
+
+        if(collection.owner != req.user.id && req.user.userRole !== 'admin') {
+            return res.status(401).json({ message: 'you do not have permission for this operation' })
+        }
+
+        await Item.findByIdAndDelete(id)
+
+        await Collection.findByIdAndUpdate(collection_id, {$pull: {
+            items_ids: id
+        }})
+
+        res.json(collection)
+    } catch (error) {
+        res.status(500).json({ error })   
+    }
+})
+
 router.get('/tags', async (req, res) => {
     try {
         const tags = await Tags.find({})

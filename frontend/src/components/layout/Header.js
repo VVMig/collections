@@ -64,7 +64,7 @@ function Header(props){
                         <Link to="/login">{lang.Header.logIn[userData.user.lang]}</Link>
                         <Link to="/register">{lang.Header.register[userData.user.lang]}</Link>
                     </div> :
-                    <div className="d-flex flex-column ml-md-3">
+                    <div className="flex-column ml-md-3 mt-1 mt-md-0 avatar">
                         <div className="btn-group">
                             {userData.token ? <button type="button" className={`btn dropdown-toggle bg-dark${!userData.user.userPhoto && ' text-light'}`} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <UserPicture picture={userData.user.userPhoto} name={userData.user.displayName}/>
@@ -72,7 +72,7 @@ function Header(props){
                             <button type="button" className={`btn dropdown-toggle`} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <div style={{background: 'grey'}}></div>
                             </button>}
-                            <div className="dropdown-menu dropdown-menu-right">
+                            <div className="dropdown-menu dropdown-menu-md-right">
                                 {userData.user && <button className="dropdown-item" onClick={() => history.push(`/profile?id=${userData.user.id}`)}>{userData.user.displayName}</button>}
                                 <button className="dropdown-item" onClick={() => logout()}>{lang.Header.logOut[userData.user.lang]}</button>
                             </div>

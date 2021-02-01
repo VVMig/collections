@@ -1,10 +1,11 @@
 import React, { useRef, useEffect } from 'react'
 import Tags from '@yaireo/tagify/dist/react.tagify'
 import { useSelector, connect, useDispatch } from 'react-redux'
-
+import 'bootstrap/js/dist/modal'
 import '@yaireo/tagify/dist/tagify.css'
 
 import './ModalItem.css'
+import $ from 'jquery'
 
 import Comment from '../comment/Comment'
 import AddComment from '../comment/AddComment'
@@ -13,13 +14,29 @@ import Like from './ItemLike'
 import { getItem } from '../../redux/actions'
 
 import lang from '../../lang.json'
+import { useHistory, useLocation } from 'react-router-dom'
 
 function ModalItem(props) {
     const { item } = useSelector(state => state.item)
     const { userData } = useSelector(state => state.userData)
     const { collection } = useSelector(state => state.collection.collection)
 
-    const closeModal = useRef()
+    const history = useHistory()
+
+    const location = useLocation()
+
+    const item_id = new URLSearchParams(location.search).get('item_id')
+
+    const modal = useRef()
+
+    useEffect(() => {
+        if(item_id)
+            $(modal.current).modal('show')
+        if(!item_id)
+            $(modal.current).modal('hide') 
+            
+        console.log(item_id)    
+    }, [item_id])   
 
     const dispatch = useDispatch()
 
@@ -34,13 +51,19 @@ function ModalItem(props) {
         return () => clearInterval(interval)
     })
 
+    function clearItem() {
+        $(modal.current).on('hide.bs.modal', (e) => {
+            history.push(`/collection?collection_id=${collection._id}`)
+        })
+    }
+
     return (
-        <div className="modal fade" ref={closeModal} tabIndex="-1" id="item" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade" ref={modal} tabIndex="-1" id="item" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">{item.title}</h5>
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={clearItem}>
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -61,7 +84,7 @@ function ModalItem(props) {
                         {collection.comments &&
                         <>
                             <AddComment />
-                            {item.comments ? item.comments.map((e,i) => <Comment key={i} {...e} modal={closeModal} owner={userData.user && userData.user.id}/>) :
+                            {item.comments ? item.comments.map((e,i) => <Comment key={i} {...e} owner={userData.user && userData.user.id}/>) :
                             <p>Loading...</p>}
                         </>
                         }

@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Tags from '@yaireo/tagify/dist/react.tagify'
 import '@yaireo/tagify/dist/tagify.css'
 import Axios from 'axios'
 
 import { useSelector, useDispatch } from 'react-redux'
 
-import { getCollection } from '../../redux/actions'
+import { clearErrorAll, getCollection, setError, setNotify } from '../../redux/actions'
 
 import FileInput from '../fileInput/FileInput'
 import { API_URL } from '../../config'
@@ -13,6 +13,7 @@ import { API_URL } from '../../config'
 import lang from '../../lang.json'
 
 import './AddItem.scss'
+import { END_LOADING_COLLECTION, START_LOADING_COLLECTION } from '../../redux/types'
 
 const baseTagifySettings = {
     blacklist: ["xxx", "yyy", "zzz"],
@@ -24,7 +25,6 @@ const baseTagifySettings = {
   }
 
 function EditItemModal(props) {
-    const closeModal = useRef()
     const tagifyRef = useRef()
 
     const { userData } = useSelector(state => state.userData)
@@ -51,6 +51,10 @@ function EditItemModal(props) {
 
     async function saveItem() {
         try {
+            dispatch(clearErrorAll())
+            dispatch({type: START_LOADING_COLLECTION})
+            dispatch(setNotify(true))
+
             await Axios.post(`${API_URL}/api/item/edit`, {
                 picture,
                 title,
@@ -66,9 +70,11 @@ function EditItemModal(props) {
             })
 
             dispatch(getCollection(collection._id))
-            closeModal.current.click()
         } catch (error) {
-            console.log(error.response.data)
+            dispatch(setError(error))
+        }
+        finally {
+            dispatch({type: END_LOADING_COLLECTION})
         }
     }
 
@@ -88,7 +94,6 @@ function EditItemModal(props) {
             } catch (error) {
                 
             }
-            
         }
         getTags()
     }, [])
@@ -165,8 +170,8 @@ function EditItemModal(props) {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal" ref={closeModal}>{lang.AddItemModal.close[userData.user.lang]}</button>
-                            <button type="button" className="btn btn-primary" onClick={saveItem}>{lang.EditItemModal.saveItem[userData.user.lang]}</button>
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal">{lang.AddItemModal.close[userData.user.lang]}</button>
+                            <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={saveItem}>{lang.EditItemModal.saveItem[userData.user.lang]}</button>
                         </div> 
                     </>
                 </div>

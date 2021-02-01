@@ -1,6 +1,6 @@
 import './App.scss';
 import { useEffect } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
 import { connect, useDispatch } from 'react-redux'
 
 import Header from './components/layout/Header'
@@ -20,7 +20,7 @@ import AlertStatus from './components/alerts/AlertStatus';
 
 function App() {
   const dispatch = useDispatch()
-
+  
   useEffect(() => {
     dispatch(getUser())
   }, [dispatch])

@@ -13,7 +13,7 @@ function AlertError() {
         <>
             {!loading && error && <div className="alert alert-warning alert-danger fade-in show mt-1" role="alert">
                 {error}
-                <button type="button" class="close" aria-label="Close" data-dismiss="alert" onClick={() => dispatch(clearErrorAll())}>
+                <button type="button" className="close" aria-label="Close" data-dismiss="alert" onClick={() => dispatch(clearErrorAll())}>
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>}
